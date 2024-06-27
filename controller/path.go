@@ -7,17 +7,26 @@ import (
 	"net/http"
 )
 
+const (
+	ASK  = "ASK"
+	DESC = "DESC"
+)
+
 func PathHandle(w http.ResponseWriter, r *http.Request) {
 	root := r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
 
-	if root == "" || sort == "" {
+	if root == "" {
 		log.Printf("%v Ошибка: пропущены нужные флаги.", r.URL)
 		http.Error(w, "Ошибка: пропущены нужные флаги.", http.StatusBadRequest)
 		return
 	}
 
-	if !(sort == "ASK" || sort == "DESC") {
+	if sort == "" {
+		sort = ASK
+	}
+
+	if !(sort == ASK || sort == DESC) {
 		log.Printf("%v Ошибка: флаг сорт не может быть с таким значением.", r.URL)
 		http.Error(w, "Ошибка: флаг сорт не может быть с таким значением.", http.StatusBadRequest)
 		return
