@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"RBS-Task-3/internal"
+	"RBS-Task-3/pkg/fileProperty"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -32,7 +32,7 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	output, err := internal.OutputFileProperty(root, sort)
+	output, err := fileProperty.OutputFileProperty(root, sort)
 	if err != nil {
 		log.Printf("%v %v", r.URL, err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
