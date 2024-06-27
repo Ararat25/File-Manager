@@ -16,11 +16,16 @@ const (
 var nameSizes = [5]string{"b", "Kb", "Mb", "Gb", "Tb"}
 
 type File struct {
-	Name     string
-	FileType string
-	Size     string
-	ByteSize int64 `json:"-"`
+	Name     string `json:"Name"`     // название файла
+	FileType string `json:"FileType"` // тип файла
+	Size     string `json:"Size"`     // размер файла в форматированном виде
+	ByteSize int64  `json:"-"`        // размер файла в байтах
 }
+
+const (
+	ASC  = "asc"
+	DESC = "desc"
+)
 
 // OutputFileProperty возвращает слайс файлов со свойствами
 func OutputFileProperty(dirName string, sortMethod string) ([]File, error) {
@@ -53,28 +58,25 @@ func determineSize(f string) (int64, error) {
 	return size, nil
 }
 
-// processFile функция для записи файлов в слайс
-func processFile(fPath string, fileInfo fs.FileInfo, file fs.DirEntry, files *[]File, wg *sync.WaitGroup, mu *sync.Mutex) {
-	defer wg.Done()
-
+// getFileProperty определяет свойства файла
+func getFileProperty(fileInfo fs.FileInfo, file fs.DirEntry) File {
 	typeFile := "file"
 	size := fileInfo.Size()
 
-	if file.IsDir() {
-		typeFile = "dir"
+	return File{Name: file.Name(), FileType: typeFile, Size: formatSize(size), ByteSize: size}
+}
 
-		var err error
+// getFileProperty определяет свойства директории
+func getDirectoryProperty(dirPath string, dir fs.DirEntry) (File, error) {
+	typeFile := "dir"
+	var err error
 
-		size, err = determineSize(fPath)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	size, err := determineSize(dirPath)
+	if err != nil {
+		return File{}, err
 	}
 
-	mu.Lock()
-	defer mu.Unlock()
-	*files = append(*files, File{Name: file.Name(), FileType: typeFile, Size: formatSize(size), ByteSize: size})
+	return File{Name: dir.Name(), FileType: typeFile, Size: formatSize(size), ByteSize: size}, err
 }
 
 // setPropertiesFiles задает файлам из слайса соответствующие свойства
@@ -86,14 +88,9 @@ func setPropertiesFiles(dirName string) ([]File, error) {
 
 	var sliceFiles []File
 
-	var (
-		mu sync.Mutex
-		wg sync.WaitGroup
-	)
+	var wg sync.WaitGroup
 
-	for _, file := range files {
-		wg.Add(1)
-
+	for i, file := range files {
 		fPath := fmt.Sprintf("%s/%s", dirName, file.Name())
 
 		fileInfo, err := os.Stat(fPath)
@@ -102,12 +99,23 @@ func setPropertiesFiles(dirName string) ([]File, error) {
 			continue
 		}
 
-		if fileInfo.IsDir() {
-			go processFile(fPath, fileInfo, file, &sliceFiles, &wg, &mu)
-		} else {
-			processFile(fPath, fileInfo, file, &sliceFiles, &wg, &mu)
-		}
+		sliceFiles = append(sliceFiles, File{})
 
+		if fileInfo.IsDir() {
+			wg.Add(1)
+			go func(curr int) {
+				defer wg.Done()
+				f, err := getDirectoryProperty(fPath, file)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				(sliceFiles)[i] = f
+			}(i)
+		} else {
+			f := getFileProperty(fileInfo, file)
+			sliceFiles[i] = f
+		}
 	}
 
 	wg.Wait()
@@ -117,13 +125,13 @@ func setPropertiesFiles(dirName string) ([]File, error) {
 
 // sortFiles сортирует слайс с файлами по размеру
 func sortFiles(files []File, sortMethod string) []File {
-	if sortMethod == "ASK" {
+	if sortMethod == ASC {
 		sort.Slice(files, func(i, j int) bool {
 			return files[i].ByteSize < files[j].ByteSize
 		})
 	}
 
-	if sortMethod == "DESC" {
+	if sortMethod == DESC {
 		sort.Slice(files, func(i, j int) bool {
 			return files[i].ByteSize > files[j].ByteSize
 		})

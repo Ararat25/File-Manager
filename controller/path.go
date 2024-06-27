@@ -5,16 +5,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-)
-
-const (
-	ASK  = "ASK"
-	DESC = "DESC"
+	"strings"
 )
 
 func PathHandle(w http.ResponseWriter, r *http.Request) {
 	root := r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
+
+	root = strings.ToLower(root)
+	sort = strings.ToLower(sort)
 
 	if root == "" {
 		log.Printf("%v Ошибка: пропущены нужные флаги.", r.URL)
@@ -23,10 +22,10 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if sort == "" {
-		sort = ASK
+		sort = fileProperty.ASC
 	}
 
-	if !(sort == ASK || sort == DESC) {
+	if !(sort == fileProperty.ASC || sort == fileProperty.DESC) {
 		log.Printf("%v Ошибка: флаг сорт не может быть с таким значением.", r.URL)
 		http.Error(w, "Ошибка: флаг сорт не может быть с таким значением.", http.StatusBadRequest)
 		return
