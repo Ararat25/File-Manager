@@ -1,20 +1,24 @@
 package controller
 
 import (
-	"RBS-Task-3/internal"
+	"RBS-Task-3/pkg/fileProperty"
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 )
 
 const (
-	ASK  = "ASK"
-	DESC = "DESC"
+	ASC  = "asc"
+	DESC = "desc"
 )
 
 func PathHandle(w http.ResponseWriter, r *http.Request) {
 	root := r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
+
+	root = strings.ToLower(root)
+	sort = strings.ToLower(sort)
 
 	if root == "" {
 		log.Printf("%v Ошибка: пропущены нужные флаги.", r.URL)
@@ -23,16 +27,16 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if sort == "" {
-		sort = ASK
+		sort = ASC
 	}
 
-	if !(sort == ASK || sort == DESC) {
+	if !(sort == ASC || sort == DESC) {
 		log.Printf("%v Ошибка: флаг сорт не может быть с таким значением.", r.URL)
 		http.Error(w, "Ошибка: флаг сорт не может быть с таким значением.", http.StatusBadRequest)
 		return
 	}
 
-	output, err := internal.OutputFileProperty(root, sort)
+	output, err := fileProperty.Output(root, sort)
 	if err != nil {
 		log.Printf("%v %v", r.URL, err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)

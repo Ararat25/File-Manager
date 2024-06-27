@@ -1,29 +1,28 @@
 package main
 
 import (
+	"RBS-Task-3/cmd/recover"
 	"RBS-Task-3/controller"
-	"RBS-Task-3/internal"
+	"RBS-Task-3/internal/config"
 	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"os/signal"
 	"syscall"
 )
-
-func init() {
-	internal.LoadEnvVariables()
-}
 
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
-	server := getServer()
+	server, err := getServer()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	err := runServer(ctx, server)
+	err = runServer(ctx, server)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,7 +39,7 @@ func runServer(ctx context.Context, server *http.Server) error {
 
 	log.Printf("Запуск сервера с адресом: %s", server.Addr)
 
-	err := internal.Recover(ctx, server)
+	err := recover.Recover(ctx, server)
 	if err != nil {
 		return err
 	}
@@ -49,9 +48,13 @@ func runServer(ctx context.Context, server *http.Server) error {
 }
 
 // getServer возвращает сервер с определенными параметрами
-func getServer() *http.Server {
-	port := os.Getenv("SERVER_PORT")
-	listenAddr := fmt.Sprintf(":%s", port)
+func getServer() (*http.Server, error) {
+	conf, err := config.GetConfigData("config.json")
+	if err != nil {
+		return nil, err
+	}
+
+	listenAddr := fmt.Sprintf(":%v", conf.Port)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/path", controller.PathHandle)
@@ -61,5 +64,5 @@ func getServer() *http.Server {
 		Handler: mux,
 	}
 
-	return srv
+	return srv, nil
 }
