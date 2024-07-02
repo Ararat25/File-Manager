@@ -12,8 +12,9 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 	root := r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
 
-	root = strings.ToLower(root)
 	sort = strings.ToLower(sort)
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if root == "" {
 		log.Printf("%v Ошибка: пропущены нужные флаги.", r.URL)
@@ -45,7 +46,7 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Add("Content-Type", "application/json")
 
 	w.WriteHeader(http.StatusOK)
 
