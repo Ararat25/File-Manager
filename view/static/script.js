@@ -1,12 +1,22 @@
 const url = "http://localhost:8080/"
 
-currentPath = document.getElementById('current-path').innerHTML 
-upload(currentPath)
+const sortAsc = "asc"
+const sortDesc = "desc"
+let flag = true
 
-async function upload(currentPath) {
+currentPath = document.getElementById('current-path').innerHTML 
+upload(currentPath, flag)
+
+async function upload(currentPath, sortFlag) {
     document.getElementById('loading-spinner').style.display = 'block';
 
-    await fetch(url + 'path?root=' + currentPath.slice(1, -1) + '&sort=desc', {
+    let sort = sortAsc
+
+    if (!sortFlag) {
+        sort = sortDesc
+    }
+
+    await fetch(url + 'path?root=' + currentPath.slice(1, -1) + '&sort=' + sort, {
         method: "GET",
     })
     .then(resp => {
@@ -56,7 +66,7 @@ function getCurrPath(event) {
 
     document.getElementById('current-path').innerHTML = currentPath
 
-    upload(currentPath)
+    upload(currentPath, flag)
 }
 
 function backPath() {
@@ -78,5 +88,19 @@ function backPath() {
 
     document.getElementById('current-path').innerHTML = newPath
 
-    upload(newPath)
+    upload(newPath, flag)
+}
+
+function sort() {
+    let currentPath = document.getElementById('current-path').textContent
+
+    flag = !flag
+
+    if (flag) {
+        document.querySelector(".sort-button").style.backgroundImage = "url('static/source/icon/sortAsc.svg')";
+    } else {
+        document.querySelector(".sort-button").style.backgroundImage = "url('static/source/icon/sortDesc.svg')";
+    }
+
+    upload(currentPath, flag)
 }

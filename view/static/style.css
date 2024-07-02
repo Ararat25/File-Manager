@@ -70,9 +70,11 @@ body {
     min-width: 10px;
     width: 100%;
     white-space: nowrap;
-    overflow: scroll;
+    overflow-x: auto;
+    overflow-y: hidden;
     height: 30px;
     margin-top: 10px;
+    scrollbar-width: thin;
 }
 
 /* Блоки файлов */
