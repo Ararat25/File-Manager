@@ -6,7 +6,8 @@ import (
 )
 
 type Config struct {
-	Port int `json:"Port"` // порт для сервера
+	Port int    `json:"Port"` // порт для сервера
+	Root string `json:"Root"` // корневая папка
 }
 
 func GetConfigData(file string) (*Config, error) {

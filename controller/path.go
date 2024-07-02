@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"RBS-Task-3/internal/config"
 	"RBS-Task-3/pkg/fileProperty"
 	"encoding/json"
 	"log"
@@ -9,7 +10,14 @@ import (
 )
 
 func PathHandle(w http.ResponseWriter, r *http.Request) {
-	root := r.URL.Query().Get("root")
+	conf, err := config.GetConfigData("config.json")
+	if err != nil {
+		log.Printf("%v Ошибка: ", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	root := conf.Root + r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
 
 	sort = strings.ToLower(sort)

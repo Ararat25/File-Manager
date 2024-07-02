@@ -58,6 +58,10 @@ func getServer() (*http.Server, error) {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/path", controller.PathHandle)
+	mux.HandleFunc("/fs", controller.MainPage)
+
+	fileServer := http.FileServer(http.Dir("./view/static"))
+	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	srv := &http.Server{
 		Addr:    listenAddr,

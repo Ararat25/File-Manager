@@ -6,7 +6,7 @@ upload(currentPath)
 async function upload(currentPath) {
     document.getElementById('loading-spinner').style.display = 'block';
 
-    await fetch(url + 'path?root=' + currentPath + '&sort=desc', {
+    await fetch(url + 'path?root=' + currentPath.slice(1, -1) + '&sort=desc', {
         method: "GET",
     })
     .then(resp => {
