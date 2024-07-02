@@ -1,0 +1,172 @@
+/* Основное тело сайта */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Основной контейнер файлового менеджера */
+.file-manager {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    min-width: 350px;
+}
+
+/* Заголовок сайта */
+.file-manager h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Анимация загрузки рядом с заголовком */
+#loading-spinner {
+    display: none;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #7d7f80;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    margin-left: 10px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+
+/* Навигационная панель */
+.file-manager .search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid black;
+    padding: 10px 10px;
+    min-width: 300px;
+    margin-left: auto;
+    color: #000000;
+}
+
+/* Кнопка на навигационной панели */
+.file-manager .search-bar button {
+    border: none;
+    cursor: pointer;
+}
+
+/* Блок текущего пути до директории */
+.current-path {
+    margin-left: 6px;
+    margin-right: 6px;
+    font-size: 16px;
+    min-width: 10px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: scroll;
+    height: 30px;
+    margin-top: 10px;
+}
+
+/* Блоки файлов */
+.file-manager .file-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-width: 300px;
+    margin: 10px 0 10px 0;
+    color: #000000;
+    background-color: #F5F5F5;
+}
+
+/* Иконка файла */
+.file-manager .file-item .icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+/* Названия файла */
+.file-manager .file-item .name {
+    text-decoration: none;
+    color: inherit;
+    margin-left: 10px;
+    width: 350px;
+}
+
+/* Кнопка сортировки */
+.sort-button {
+    background-image: url('source/icon/sortAsc.svg');
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    margin-left: auto;
+    margin-right: 1.5%;
+    background-color: transparent;
+}
+
+/* Кнопка назад */
+.back-button {
+    background-image: url('source/icon/back.svg');
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-color: transparent;
+}
+
+/* Иконка директории */
+.directory-icon {
+    background-image: url('source/icon/folder.svg');
+    width: 35px;
+    height: 30px;
+    background-size: cover;
+    margin-left: 10px;
+    min-width: 35px;
+    background-color: transparent;
+}
+
+/* Иконка файла */
+.file-icon {
+    background-image: url('source/icon/file.svg');
+    width: 30px;
+    height: 35px;
+    background-size: cover;
+    margin-left: 15px;
+    min-width: 30px;
+    background-color: transparent;
+}
+
+/* Активное состояние ссылки с именем файла */
+a.name:active {
+    text-decoration: none;
+}
+
+/* Блок текущего пути */
+.block-current-path {
+    background-color: #e4e4e4;
+    border-radius: 7px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    width: 70%;
+}
+
+/* Стили для размера файла */
+.size {
+    margin-left: auto;
+    margin-right: 3%;
+}
+
+/* Стили для блоков с директориями */
+#directory-item {
+    background-color: #D9D9D9
+}
