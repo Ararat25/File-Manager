@@ -1,14 +1,32 @@
 const url = "http://localhost:8080/"
 
+// Константы для сортировки по возрастанию и убыванию
 const sortAsc = "asc"
 const sortDesc = "desc"
+
+// Флаг для переключения сортировки
 let flag = true
 
-currentPath = document.getElementById('current-path').innerHTML 
+// Объект для управления отображением загрузочного спиннера
+const Loader = {
+    loadingSpinner: document.getElementById('loading-spinner'),
+    on() {
+        this.loadingSpinner.style.display = 'block'
+    },
+    off() {
+        this.loadingSpinner.style.display = 'none'
+    }
+}
+
+// Получаем текущий путь
+let currentPath = document.getElementById('current-path').innerHTML
+
+// Вызываем функцию загрузки файлов и директорий
 upload(currentPath, flag)
 
+// Загружает файлы и директории из указанного пути с сортировкой
 async function upload(currentPath, sortFlag) {
-    document.getElementById('loading-spinner').style.display = 'block';
+    Loader.on()
 
     let sort = sortAsc
 
@@ -29,7 +47,7 @@ async function upload(currentPath, sortFlag) {
                     if (element["FileType"] === "dir") {
                         file_list.innerHTML += `<div class="file-item" id="directory-item">
                                                     <div class="directory-icon"></div>
-                                                    <a href="#" class="name" onclick="getCurrPath(event)">${element["Name"]}</a>
+                                                    <a href="#" class="name" onclick="navigateToDirectory(event)">${element["Name"]}</a>
                                                     <span class="type">директория</span>
                                                     <span class="size">${element["Size"]}</span>
                                                 </div>`
@@ -56,10 +74,11 @@ async function upload(currentPath, sortFlag) {
         console.log(error);
     })
 
-    document.getElementById('loading-spinner').style.display = 'none';
+    Loader.off()
 }
 
-function getCurrPath(event) {
+// Обрабатывает клик на директорию и запускает функцию upload() с новым путем
+function navigateToDirectory(event) {
     var clickedElement = event.target;
 
     let currentPath = document.getElementById('current-path').textContent + clickedElement.textContent + "/"
@@ -69,6 +88,7 @@ function getCurrPath(event) {
     upload(currentPath, flag)
 }
 
+// Обрабатывает клик на кнопку "Назад" и запускает функцию upload() с новым путем.
 function backPath() {
     let currentPath = document.getElementById('current-path').textContent
 
@@ -78,8 +98,6 @@ function backPath() {
     }
 
     let pathArray = currentPath.split('/');
-
-    console.log(pathArray)
 
     pathArray.pop();
     pathArray.pop();
@@ -91,6 +109,7 @@ function backPath() {
     upload(newPath, flag)
 }
 
+// запускает функцию upload() в соответствии с выбранной сортировкой
 function sort() {
     let currentPath = document.getElementById('current-path').textContent
 
