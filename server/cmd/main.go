@@ -13,18 +13,27 @@ import (
 	"syscall"
 )
 
+func init() {
+	err := config.GetConfigData("../config/goconfig.json")
+	if err != nil {
+		log.Fatalf("Не удалось загрузить config.json: %v", err)
+	}
+}
+
 func main() {
-	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGTSTP)
 	defer cancel()
 
 	server, err := getServer()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	err = runServer(ctx, server)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 }
 
@@ -49,10 +58,10 @@ func runServer(ctx context.Context, server *http.Server) error {
 
 // getServer возвращает сервер с определенными параметрами
 func getServer() (*http.Server, error) {
-	conf, err := config.GetConfigData("config.json")
-	if err != nil {
-		return nil, err
+	if config.ConfigFile == nil {
+		return nil, errors.New("ошибка: Не удалось загрузить config")
 	}
+	conf := *config.ConfigFile
 
 	listenAddr := fmt.Sprintf(":%v", conf.Port)
 
@@ -60,7 +69,7 @@ func getServer() (*http.Server, error) {
 	mux.HandleFunc("/path", controller.PathHandle)
 	mux.HandleFunc("/fs", controller.MainPage)
 
-	fileServer := http.FileServer(http.Dir("./view/static"))
+	fileServer := http.FileServer(http.Dir("../client/static"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	srv := &http.Server{

@@ -10,12 +10,12 @@ import (
 )
 
 func PathHandle(w http.ResponseWriter, r *http.Request) {
-	conf, err := config.GetConfigData("config.json")
-	if err != nil {
-		log.Printf("%v Ошибка: ", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if config.ConfigFile == nil {
+		log.Printf("Ошибка: Не удалось загрузить config")
+		http.Error(w, "Ошибка: Не удалось загрузить config", http.StatusInternalServerError)
 		return
 	}
+	conf := *config.ConfigFile
 
 	root := conf.Root + r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
