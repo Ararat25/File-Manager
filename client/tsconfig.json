@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./static",
+    "outDir": "./srcTS",
     "rootDir": ".",
     "target": "ES5",
     "lib": [

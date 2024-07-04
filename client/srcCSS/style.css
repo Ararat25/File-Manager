@@ -106,7 +106,7 @@ body {
 
 /* Кнопка сортировки */
 .sort-button {
-    background-image: url('source/icon/sortAsc.svg');
+    background-image: url('../source/icon/sortAsc.svg');
     width: 40px;
     height: 40px;
     background-size: cover;
@@ -117,7 +117,7 @@ body {
 
 /* Кнопка назад */
 .back-button {
-    background-image: url('source/icon/back.svg');
+    background-image: url('../source/icon/back.svg');
     width: 40px;
     height: 40px;
     background-size: cover;
@@ -126,7 +126,7 @@ body {
 
 /* Иконка директории */
 .directory-icon {
-    background-image: url('source/icon/folder.svg');
+    background-image: url('../source/icon/folder.svg');
     width: 35px;
     height: 30px;
     background-size: cover;
@@ -137,7 +137,7 @@ body {
 
 /* Иконка файла */
 .file-icon {
-    background-image: url('source/icon/file.svg');
+    background-image: url('../source/icon/file.svg');
     width: 30px;
     height: 35px;
     background-size: cover;
