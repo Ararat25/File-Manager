@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"RBS-Task-3/internal/config"
-	"RBS-Task-3/pkg/fileProperty"
+	"RBS-Task-3/server/config"
+	"RBS-Task-3/server/pkg/fileProperty"
 	"encoding/json"
 	"log"
 	"net/http"

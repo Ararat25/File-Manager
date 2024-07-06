@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-    entry: ['./index.ts'],
+    entry: ['./client/index.ts'],
     module: {
         rules: [
             {
@@ -15,7 +15,7 @@ module.exports = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, 'static'),
+        path: path.resolve(__dirname, 'client/static'),
         filename: 'bundle.js'
     },
 }

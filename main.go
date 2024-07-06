@@ -1,9 +1,9 @@
 package main
 
 import (
-	"RBS-Task-3/cmd/recover"
-	"RBS-Task-3/controller"
-	"RBS-Task-3/internal/config"
+	"RBS-Task-3/server/config"
+	"RBS-Task-3/server/controller"
+	"RBS-Task-3/server/recover"
 	"context"
 	"errors"
 	"fmt"
@@ -14,7 +14,7 @@ import (
 )
 
 func init() {
-	err := config.GetConfigData("../config/goconfig.json")
+	err := config.GetConfigData("./server.config.json")
 	if err != nil {
 		log.Fatalf("Не удалось загрузить config.json: %v", err)
 	}
@@ -70,7 +70,7 @@ func getServer() (*http.Server, error) {
 	mux.HandleFunc("/path", controller.PathHandle)
 	mux.HandleFunc("/fs", controller.MainPage)
 
-	fileServer := http.FileServer(http.Dir("../client/static"))
+	fileServer := http.FileServer(http.Dir("./client/static"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	srv := &http.Server{
