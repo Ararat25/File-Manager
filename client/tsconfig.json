@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./srcTS",
+    "outDir": "./scripts",
     "rootDir": ".",
     "target": "ES5",
     "lib": [

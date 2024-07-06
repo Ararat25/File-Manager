@@ -1,2 +1,2 @@
-import './srcCSS/style.css'
-import './srcTS/script.ts'
+import './css/style.css'
+import './scripts/script.ts'

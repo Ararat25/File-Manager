@@ -106,7 +106,6 @@ body {
 
 /* Кнопка сортировки */
 .sort-button {
-    background-image: url('../source/icon/sortAsc.svg');
     width: 40px;
     height: 40px;
     background-size: cover;
@@ -171,4 +170,12 @@ a.name:active {
 /* Стили для блоков с директориями */
 #directory-item {
     background-color: #D9D9D9
+}
+
+.asc {
+    background-image: url('../source/icon/sortAsc.svg');
+}
+
+.desc {
+    background-image: url('../source/icon/sortDesc.svg');
 }

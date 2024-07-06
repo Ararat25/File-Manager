@@ -95,9 +95,11 @@ function sort() {
     flag = !flag
 
     if (flag) {
-        document.querySelector<HTMLButtonElement>(".sort-button")!.style.backgroundImage = "url('static/source/icon/sortAsc.svg')";
+        document.querySelector<HTMLButtonElement>(".sort-button")!.classList.add('asc');
+        document.querySelector<HTMLButtonElement>(".sort-button")!.classList.remove('desc');
     } else {
-        document.querySelector<HTMLButtonElement>(".sort-button")!.style.backgroundImage = "url('static/source/icon/sortDesc.svg')";
+        document.querySelector<HTMLButtonElement>(".sort-button")!.classList.add('desc');
+        document.querySelector<HTMLButtonElement>(".sort-button")!.classList.remove('asc');
     }
 
     upload(currentPath, flag)
