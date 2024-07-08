@@ -3,10 +3,12 @@ package controller
 import (
 	"RBS-Task-3/server/config"
 	"RBS-Task-3/server/pkg/fileProperty"
+	"bytes"
 	"encoding/json"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // Response структура для записи ответа от сервера
@@ -16,8 +18,20 @@ type Response struct {
 	Files  []fileProperty.File `json:"Files"`
 }
 
+type RequestToPhp struct {
+	Root      string `json:"root"`
+	Size      int    `json:"size"`
+	TimeSpent int    `json:"timeSpent"`
+}
+
+const (
+	url = "http://localhost:3000/index.php"
+)
+
 // PathHandle обрабатывает HTTP-запросы для получения свойств файлов по указанному пути с возможностью сортировки
 func PathHandle(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
+
 	if config.ConfigFile == nil {
 		log.Printf("Ошибка: Не удалось загрузить config")
 
@@ -111,6 +125,73 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 		w.Write(resp)
 		return
 	}
+
+	elapsed := time.Since(start)
+
+	go func() {
+		var fullSize int64
+		for _, file := range output {
+			fullSize += file.ByteSize
+		}
+
+		data := RequestToPhp{
+			Root:      root,
+			Size:      int(fullSize),
+			TimeSpent: int(elapsed.Milliseconds()),
+		}
+
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			log.Printf("%v %v", r.URL, err.Error())
+
+			resp, _ := json.Marshal(Response{
+				Status: 500,
+				Error:  err.Error(),
+				Files:  nil,
+			})
+
+			w.WriteHeader(http.StatusInternalServerError)
+
+			w.Write(resp)
+			return
+		}
+
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+		if err != nil {
+			log.Printf("%v %v", r.URL, err.Error())
+
+			resp, _ := json.Marshal(Response{
+				Status: 500,
+				Error:  err.Error(),
+				Files:  nil,
+			})
+
+			w.WriteHeader(http.StatusInternalServerError)
+
+			w.Write(resp)
+			return
+		}
+
+		req.Header.Set("Content-Type", "application/json")
+
+		client := &http.Client{}
+		respPhp, err := client.Do(req)
+		if err != nil {
+			log.Printf("%v %v", r.URL, err.Error())
+
+			resp, _ := json.Marshal(Response{
+				Status: 500,
+				Error:  err.Error(),
+				Files:  nil,
+			})
+
+			w.WriteHeader(http.StatusInternalServerError)
+
+			w.Write(resp)
+			return
+		}
+		defer respPhp.Body.Close()
+	}()
 
 	w.Header().Add("Content-Type", "application/json")
 
