@@ -10,11 +10,14 @@ import (
 )
 
 const (
-	sizeConversionFactor = 1000
+	sizeConversionFactor = 1000 // значение для конвертации размеров файлов
 )
 
-var nameSizes = [5]string{"b", "Kb", "Mb", "Gb", "Tb"}
+var (
+	nameSizes = [5]string{"b", "Kb", "Mb", "Gb", "Tb"} // массив с значениями названий для размера файлов
+)
 
+// File структура для хранения свойств файлов
 type File struct {
 	Name     string `json:"Name"`     // название файла
 	FileType string `json:"FileType"` // тип файла
@@ -23,8 +26,8 @@ type File struct {
 }
 
 const (
-	ASC  = "asc"
-	DESC = "desc"
+	ASC  = "asc"  // значение для сортировки по возрастанию
+	DESC = "desc" // значение для сортировки по убыванию
 )
 
 // OutputFileProperty возвращает слайс файлов со свойствами

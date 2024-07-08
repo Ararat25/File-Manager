@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// MainPage обработчик, который возвращает html страницу
 func MainPage(res http.ResponseWriter, req *http.Request) {
 	ts, err := template.ParseFiles("./client/index.html")
 	if err != nil {

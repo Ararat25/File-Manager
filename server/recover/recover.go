@@ -8,7 +8,9 @@ import (
 	"time"
 )
 
-const shutdownTimeout = 3 * time.Second
+const (
+	shutdownTimeout = 3 * time.Second // timeout для метода shutdown
+)
 
 // Recover плавно завершает работу сервера
 func Recover(ctx context.Context, srv *http.Server) error {

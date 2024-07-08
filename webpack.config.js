@@ -1,6 +1,9 @@
 const path = require('path')
 
 module.exports = {
+    resolve: {
+        extensions: ['.js', '.ts']
+    },
     entry: ['./client/index.ts'],
     module: {
         rules: [
