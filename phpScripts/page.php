@@ -1,10 +1,12 @@
 <?php
 
+$config = include('config.php');
+
 // Настройки подключения к базе данных
-$servername = "localhost";  // Сервер базы данных
-$username = "root";         // Имя пользователя базы данных
-$password = "Vaa65770407!"; // Пароль пользователя базы данных
-$dbname = "RBS";            // Имя базы данных
+$servername = $config['servername'];    // Сервер базы данных
+$username = $config['username'];        // Имя пользователя базы данных
+$password = $config['password'];        // Пароль пользователя базы данных
+$dbname = $config['dbname'];            // Имя базы данных
 
 // Подключение к базе данных
 $conn = mysqli_connect($servername, $username, $password, $dbname);
