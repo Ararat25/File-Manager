@@ -3,12 +3,16 @@ import {flag} from "./state";
 import {backPath} from "./backPath";
 import {sort} from "./sort";
 import {navigateToDirectory} from "./navigateToDirectory";
+import {loadStat} from "./loadStat";
 
 // Получаем текущий путь
 let currentPath = (<HTMLDivElement>document.getElementById('current-path')).innerHTML
 
 // Вызываем функцию загрузки файлов и директорий
-upload(currentPath, flag)
+document.addEventListener("DOMContentLoaded", (event) => {
+    upload(currentPath, flag)
+})
+
 
 // Добавляем обработчик клика на директории
 setInterval(() => {
@@ -20,3 +24,4 @@ setInterval(() => {
 
 document.querySelector('#back-button').addEventListener('click', backPath);
 document.querySelector('#sort-button').addEventListener('click', sort);
+document.querySelector('#btn-stat').addEventListener('click', loadStat);

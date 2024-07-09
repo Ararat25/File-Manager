@@ -10,8 +10,11 @@ var ConfigFile *config
 
 // config cтруктура config.json файла
 type config struct {
-	Port int    `json:"Port"` // порт для сервера
-	Root string `json:"Root"` // корневая папка
+	Port    int    `json:"Port"`     // порт для сервера
+	Root    string `json:"Root"`     // корневая папка
+	UrlPhp  string `json:"Url_php"`  // url до php
+	PortPhp int    `json:"Port_php"` // порт для php сервера
+	PathPhp string `json:"Path_php"` // путь до php обработчика
 }
 
 // GetConfigData считывает config.json файл и записывает значения в структуру ConfigFile

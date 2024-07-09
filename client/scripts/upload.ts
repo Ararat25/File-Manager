@@ -11,7 +11,7 @@ export async function upload(currentPath: string, sortFlag: boolean) {
         sort = sortDesc
     }
 
-    await fetch(url + 'path?root=' + currentPath.slice(1, -1) + '&sort=' + sort, {
+    await fetch(url + '/path?root=' + currentPath.slice(1, -1) + '&sort=' + sort, {
         method: "GET",
     })
         .then(resp => {
