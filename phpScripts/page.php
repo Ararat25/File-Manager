@@ -8,57 +8,62 @@ $username = $config['username'];        // Имя пользователя ба�
 $password = $config['password'];        // Пароль пользователя базы данных
 $dbname = $config['dbname'];            // Имя базы данных
 
-// Подключение к базе данных
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+try {
+    // Подключение к базе данных
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-// Проверка подключения
-if (!$conn) {
-    die("Ошибка подключения: " . mysqli_connect_error());
-}
-
-// SQL-запрос для извлечения данных из таблицы Stat
-$sql = "SELECT * FROM stat";
-$result = $conn->query($sql);
-
-$sizes = [];
-$times = [];
-
-// Проверка, есть ли результаты
-if ($result->num_rows > 0) {
-    echo "<table border='1'>";
-    echo "<tr><th>ID</th><th>Root</th><th>Size</th><th>Time Spent</th><th>Date</th></tr>";
-
-    while ($row = $result->fetch_assoc()) {
-        $sizes[] = $row["size"];
-        $times[] = $row["elapced_time"];
-        echo "<tr>";
-        echo "<td>" . $row["id"] . "</td>";
-        echo "<td>" . $row["root"] . "</td>";
-        echo "<td>" . $row["size"] . "</td>";
-        echo "<td>" . $row["elapced_time"] . "</td>";
-        echo "<td>" . $row["date"] . "</td>";
-        echo "</tr>";
+    // Проверка подключения
+    if (!$conn) {
+        die("Ошибка подключения: " . mysqli_connect_error());
     }
 
-    echo "</table>";
-} else {
-    echo "0 results";
+    // SQL-запрос для извлечения данных из таблицы Stat
+    $sql = "SELECT id, root, size, elapced_time, date FROM stat";
+    $result = $conn->query($sql);
+
+    $sizes = [];
+    $times = [];
+
+    // Проверка, есть ли результаты
+    if ($result->num_rows > 0) {
+        echo "<table border='1'>";
+        echo "<tr><th>ID</th><th>Root</th><th>Size</th><th>Time Spent</th><th>Date</th></tr>";
+
+        while ($row = $result->fetch_assoc()) {
+            $sizes[] = $row["size"];
+            $times[] = $row["elapced_time"];
+            echo "<tr>";
+            echo "<td>" . $row["id"] . "</td>";
+            echo "<td>" . $row["root"] . "</td>";
+            echo "<td>" . $row["size"] . "</td>";
+            echo "<td>" . $row["elapced_time"] . "</td>";
+            echo "<td>" . $row["date"] . "</td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "0 results";
+    }
+
+    // Объединение размеров и времени в ассоциативный массив для сортировки
+    $data = array_map(null, $sizes, $times);
+
+    // Сортировка данных по размеру файла
+    usort($data, function($a, $b) {
+        return $a[0] - $b[0];
+    });
+
+    // Разделение данных обратно на два массива после сортировки
+    $sizes = array_column($data, 0);
+    $times = array_column($data, 1);
+
+    // Закрытие подключения к базе данных
+    $conn->close();
+} catch(Exception $e) {
+    echo "Ошибка: ". $e->getMessage();
 }
 
-// Объединение размеров и времени в ассоциативный массив для сортировки
-$data = array_map(null, $sizes, $times);
-
-// Сортировка данных по размеру файла
-usort($data, function($a, $b) {
-    return $a[0] - $b[0];
-});
-
-// Разделение данных обратно на два массива после сортировки
-$sizes = array_column($data, 0);
-$times = array_column($data, 1);
-
-// Закрытие подключения к базе данных
-$conn->close();
 ?>
 
 

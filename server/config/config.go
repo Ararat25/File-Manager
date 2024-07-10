@@ -17,23 +17,19 @@ type config struct {
 	PathPhp string `json:"Path_php"` // путь до php обработчика
 }
 
-// GetConfigData считывает config.json файл и записывает значения в структуру ConfigFile
-func GetConfigData(file string) error {
-	if ConfigFile == nil {
-		data, err := os.ReadFile(file)
-		if err != nil {
-			return err
-		}
-
-		var config config
-		err = json.Unmarshal(data, &config)
-		if err != nil {
-			return err
-		}
-
-		ConfigFile = &config
-		return nil
-
+// UploadConfigData считывает config.json файл и записывает значения в структуру ConfigFile
+func UploadConfigData(file string) error {
+	data, err := os.ReadFile(file)
+	if err != nil {
+		return err
 	}
+
+	var conf config
+	err = json.Unmarshal(data, &conf)
+	if err != nil {
+		return err
+	}
+
+	ConfigFile = &conf
 	return nil
 }

@@ -22,7 +22,7 @@ export function backPath() {
 
     let newPath = pathArray.join('/') + "/";
 
-    (<HTMLDivElement>document.getElementById('current-path')).innerHTML = newPath
+    (<HTMLDivElement>document.getElementById('current-path')).innerHTML = currentPath;
 
-    upload(newPath, flag)
+    upload(newPath, flag);
 }

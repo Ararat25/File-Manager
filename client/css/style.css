@@ -172,10 +172,26 @@ a.name:active {
     background-color: #D9D9D9
 }
 
+/* Стиль для строки с затраченным временем */
+#spent-time {
+    margin-bottom: 15px;
+}
+
+/* Стиль для типа файла */
+.type {
+    margin-right: 15px;
+}
+
+/* Устанавливает иконку для сортировки по возрастанию */
 .asc {
     background-image: url('../source/icon/sortAsc.svg');
 }
 
+/* Устанавливает иконку для сортировки по убыванию */
 .desc {
     background-image: url('../source/icon/sortDesc.svg');
+}
+
+#nameDir {
+    cursor: pointer;
 }

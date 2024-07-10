@@ -14,7 +14,7 @@ import (
 )
 
 func init() {
-	err := config.GetConfigData("./server.config.json")
+	err := config.UploadConfigData("./server.config.json")
 	if err != nil {
 		log.Fatalf("Не удалось загрузить config.json: %v", err)
 	}
@@ -67,7 +67,7 @@ func getServer() (*http.Server, error) {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/path", controller.PathHandle)
-	mux.HandleFunc("/fs", controller.MainPage)
+	mux.HandleFunc("/", controller.MainPage)
 
 	fileServer := http.FileServer(http.Dir("./client/static"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
