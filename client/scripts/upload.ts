@@ -1,18 +1,18 @@
-import { Loader } from "./loader";
-import { sortAsc, sortDesc } from "./consts";
+import {Loader} from "./loader";
+import {SortMethod} from "./consts";
 import {render} from "./render";
 
 // Загружает файлы и директории из указанного пути с сортировкой
-export async function upload(currentPath: string, sortFlag: boolean) {
-    Loader.on()
+export function upload(currentPath: string, sortFlag: string) {
+    Loader.show()
 
-    let sort = sortAsc
+    let sort = SortMethod.Asc
 
-    if (!sortFlag) {
-        sort = sortDesc
+    if (sortFlag === SortMethod.Desc) {
+        sort = SortMethod.Desc
     }
 
-    await fetch(`/path?root=${currentPath}&sort=${sort}`, {
+    fetch(`/path?root=${currentPath}&sort=${sort}`, {
         method: "GET",
     })
         .then(resp => {
@@ -37,6 +37,7 @@ export async function upload(currentPath: string, sortFlag: boolean) {
         .catch(error => {
             console.log(error);
         })
-
-    Loader.off()
+        .finally(() => {
+            Loader.hide()
+        })
 }

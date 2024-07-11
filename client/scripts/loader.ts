@@ -1,10 +1,10 @@
 // Объект для управления отображением загрузочного спиннера
 export const Loader = {
     loadingSpinner: <HTMLDivElement>document.getElementById('loading-spinner'),
-    on() {
+    show() {
         this.loadingSpinner.style.display = 'block'
     },
-    off() {
+    hide() {
         this.loadingSpinner.style.display = 'none'
     }
 }

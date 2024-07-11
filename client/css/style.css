@@ -21,6 +21,10 @@ body {
 .file-manager h1 {
     font-size: 24px;
     margin-bottom: 20px;
+}
+
+/* Блок с заголовком и спинером загрузки */
+.header {
     display: flex;
     align-items: center;
 }

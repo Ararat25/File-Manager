@@ -114,15 +114,7 @@ func sendRequest(reqUrl string, url string, output []fileProperty.File, root str
 func PathHandle(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 
-	if config.ConfigFile == nil {
-		log.Printf("Ошибка: Не удалось загрузить config")
-
-		writeResponse(w, "", r.URL.String(), http.StatusInternalServerError, "Ошибка: Не удалось загрузить config", nil, 0)
-		return
-	}
 	conf := *config.ConfigFile
-
-	url := fmt.Sprintf("%s:%v%v", conf.UrlPhp, conf.PortPhp, conf.PathPhp)
 
 	root := r.URL.Query().Get("root")
 	sort := r.URL.Query().Get("sort")
@@ -134,7 +126,7 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !strings.HasPrefix(root, conf.Root) {
-		log.Printf("%v %v", r.URL, "Предел глубины")
+		log.Printf("%v %v", r.URL, "Ошибка: предел глубины")
 
 		writeResponse(w, "", r.URL.String(), http.StatusBadRequest, "Это предел", nil, 0)
 		return
@@ -158,6 +150,8 @@ func PathHandle(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, "", r.URL.String(), http.StatusInternalServerError, err.Error(), nil, 0)
 		return
 	}
+
+	url := fmt.Sprintf("%s:%v%v", conf.UrlPhp, conf.PortPhp, conf.PathPhp)
 
 	elapsed := time.Since(start)
 

@@ -24,16 +24,11 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGTSTP)
 	defer cancel()
 
-	server, err := getServer()
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	server := getServer()
 
-	err = runServer(ctx, server)
+	err := runServer(ctx, server)
 	if err != nil {
-		log.Println(err)
-		return
+		log.Fatalln(err)
 	}
 }
 
@@ -57,10 +52,7 @@ func runServer(ctx context.Context, server *http.Server) error {
 }
 
 // getServer возвращает сервер с определенными параметрами
-func getServer() (*http.Server, error) {
-	if config.ConfigFile == nil {
-		return nil, errors.New("ошибка: Не удалось загрузить config")
-	}
+func getServer() *http.Server {
 	conf := *config.ConfigFile
 
 	listenAddr := fmt.Sprintf(":%v", conf.Port)
@@ -77,5 +69,5 @@ func getServer() (*http.Server, error) {
 		Handler: mux,
 	}
 
-	return srv, nil
+	return srv
 }

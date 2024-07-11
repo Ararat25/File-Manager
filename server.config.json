@@ -3,5 +3,5 @@
   "URL_PHP": "http://localhost",
   "PORT_PHP": 80,
   "PATH_PHP": "/index.php",
-  "ROOT": "/home/"
+  "ROOT": "/Go/"
 }

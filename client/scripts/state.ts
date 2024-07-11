@@ -1,6 +1,12 @@
 // Флаг для переключения сортировки
-export let flag = true
+import {SortMethod} from "./consts";
+
+export let flag = SortMethod.Asc;
 
 export function toggleFlag() {
-    flag = !flag;
+    if (flag === SortMethod.Asc) {
+        flag = SortMethod.Desc
+    } else {
+        flag = SortMethod.Asc
+    }
 }

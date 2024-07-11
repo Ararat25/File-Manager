@@ -1,5 +1,6 @@
 import {flag, toggleFlag} from "./state";
 import {upload} from "./upload";
+import {SortMethod} from "./consts";
 
 // запускает функцию upload() в соответствии с выбранной сортировкой
 export function sort() {
@@ -7,7 +8,7 @@ export function sort() {
 
     toggleFlag()
 
-    if (flag) {
+    if (flag == SortMethod.Asc) {
         document.querySelector<HTMLButtonElement>(".sort-button")!.classList.add('asc');
         document.querySelector<HTMLButtonElement>(".sort-button")!.classList.remove('desc');
     } else {
